@@ -1,11 +1,14 @@
-# Asks for input on type of game looking for (liked, never played, unfinished, missing achievements)
-# Asks for game length (??)
-# Searches dict of games (two dicts? One for type, second for length?)
-# (maybe asks how many games to suggest?)
-# Outputs suggestion 
-# Have the ability to refresh list based on previous choices
-# Have ability to go back to previous steps and change settings
-# Have ability to go back to main menu and start over at any time
+# TO-DO:
+    # Ask for input on type of game looking for (liked, never played, unfinished, missing achievements, etc.)
+    # Have ability to go back to previous steps and change settings (maybe?)
+    # Have ability to restart program at any time (if incorrect choice picked?)
+    # NEEDS REFACTORING!!!
+        # Move dicts into separate files
+        # Separate blocks of code in main() into separate functions (aka: clean it up)
+        # Comments explaining what each block does
+
+import random
+import sys
 
 def main():
     games = {
@@ -58,6 +61,83 @@ def main():
         "Will This Game Kill Me?": 6,
     }
 
-    print(games)
+    len_prompt = '''Game length (select number):
+    [1] < 10 hours
+    [2] 10-19 hours
+    [3] 20-29 hours
+    [4] 30-39 hours
+    [5] 40+ Hours
+    \n'''
+    
+    new_dict = {}
+
+    while True:
+        try:
+            len_picked = int(input(len_prompt))
+            #print(f"\nYou picked: {len_picked}\n")
+            if len_picked == 1:
+                for key, val in games.items():
+                    if val < 10:
+                        new_dict.setdefault(key, val)
+                    else:
+                        continue
+                break
+            elif len_picked == 2:
+                for key, val in games.items():
+                    if val >= 10 and val < 19:
+                        new_dict.setdefault(key, val)
+                    else:
+                        continue
+                break
+            elif len_picked == 3:
+                for key, val in games.items():
+                    if val >= 20 and val < 29:
+                        new_dict.setdefault(key, val)
+                    else:
+                        continue
+                break
+            elif len_picked == 4:
+                for key, val in games.items():
+                    if val >= 30 and val < 39:
+                        new_dict.setdefault(key, val)
+                    else:
+                        continue
+                break
+            elif len_picked == 5:
+                for key, val in games.items():
+                    if val >= 40:
+                        new_dict.setdefault(key, val)
+                    else:
+                        continue
+                break
+            else:
+                print("\nNot a valid selection, please try again.\n")
+                continue
+        except ValueError:
+            continue
+    
+    list_of_pairs = list(new_dict.items())
+    question_order = list_of_pairs[:] # make a copy of the input list
+    random.shuffle (question_order)
+    print("\nTitle:", "\nLength: ".join(map(str,random.choice(question_order))), "hours\n")
+
+    while True:
+        rec_again = input("\nDo you want another recommendation? [Y/N]: ").lower()
+        if rec_again == "y":
+            try:
+                random.shuffle (question_order)
+                print("\nTitle:", "\nLength: ".join(map(str,random.choice(question_order))), "hours\n")
+                question_order.pop()
+                print(question_order)
+            except IndexError:
+                print("\nNo new games to recommend. If you'd like to loop through previously suggested games, enter Y below.\n ")
+                question_order = list_of_pairs[:] # make a copy of the input list
+                continue
+        elif rec_again == "n":
+            print("\nGoodbye!\n")
+            sys.exit(0)
+        else:
+            print("\nInvalid entry, try again.")
+            continue
 
 main()
