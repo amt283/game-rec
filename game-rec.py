@@ -114,24 +114,25 @@ def main():
                 print("\nNot a valid selection, please try again.\n")
                 continue
         except ValueError:
+            print("\nInvalid entry, try again.\n")
             continue
     
     list_of_pairs = list(new_dict.items())
-    question_order = list_of_pairs[:] # make a copy of the input list
-    random.shuffle (question_order)
-    print("\nTitle:", "\nLength: ".join(map(str,random.choice(question_order))), "hours\n")
+    suggestions = list_of_pairs[:] # make a copy of the input list
+    random.shuffle (suggestions)
+    print("\nTitle:", "\nLength: ".join(map(str,random.choice(suggestions))), "hours\n")
 
     while True:
         rec_again = input("\nDo you want another recommendation? [Y/N]: ").lower()
         if rec_again == "y":
             try:
-                random.shuffle (question_order)
-                print("\nTitle:", "\nLength: ".join(map(str,random.choice(question_order))), "hours\n")
-                question_order.pop()
-                print(question_order)
+                random.shuffle (suggestions)
+                print("\nTitle:", "\nLength: ".join(map(str,random.choice(suggestions))), "hours\n")
+                suggestions.pop()
+                print(suggestions)
             except IndexError:
-                print("\nNo new games to recommend. If you'd like to loop through previously suggested games, enter Y below.\n ")
-                question_order = list_of_pairs[:] # make a copy of the input list
+                print("\nNo new games to recommend. Program will now loop through previously suggested games.\n ")
+                suggestions = list_of_pairs[:] # Copy input list again to repopulate suggestions
                 continue
         elif rec_again == "n":
             print("\nGoodbye!\n")
